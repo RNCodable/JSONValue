@@ -1,4 +1,6 @@
+#if canImport(Foundation)
 import Foundation
+#endif
 
 // String
 extension JSONValue {
@@ -15,30 +17,37 @@ extension JSONValue {
         .number(digits: digits)
     }
 
-    public func doubleValue() throws -> Double {
-        guard let value = Double(try digits()) else { throw Error.typeMismatch }
-        return value
-    }
-
-    public func floatValue() throws -> Float {
-        guard let value = Float(try digits()) else { throw Error.typeMismatch }
-        return value
-    }
-
-    public func decimalValue() throws -> Decimal {
-        guard let value = Decimal(string: try digits()) else { throw Error.typeMismatch }
-        return value
-    }
-
-    public func intValue() throws -> Int {
-        guard let value = Int(try digits()) else { throw Error.typeMismatch }
-        return value
-    }
-
     public func digits() throws -> String {
         guard case let .number(digits) = self else { throw Error.typeMismatch }
         return digits
     }
+
+    private func _numberValue<T: LosslessStringConvertible>() throws -> T {
+        guard let value = T(try digits()) else { throw Error.typeMismatch }
+        return value
+    }
+
+    public func intValue() throws -> Int { try _numberValue() }
+    public func doubleValue() throws -> Double { try _numberValue() }
+    public func floatValue() throws -> Float { try _numberValue() }
+
+    public func uintValue() throws -> UInt { try _numberValue() }
+    public func uint8Value() throws -> UInt8 { try _numberValue() }
+    public func uint16Value() throws -> UInt16 { try _numberValue() }
+    public func uint32Value() throws -> UInt32 { try _numberValue() }
+    public func uint64Value() throws -> UInt64 { try _numberValue() }
+
+    public func int8Value() throws -> Int8 { try _numberValue() }
+    public func int16Value() throws -> Int16 { try _numberValue() }
+    public func int32Value() throws -> Int32 { try _numberValue() }
+    public func int64Value() throws -> Int64 { try _numberValue() }
+
+    #if canImport(Foundation)
+    public func decimalValue() throws -> Decimal {
+        guard let value = Decimal(string: try digits()) else { throw Error.typeMismatch }
+        return value
+    }
+    #endif
 }
 
 // Bool
