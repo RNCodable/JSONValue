@@ -40,9 +40,9 @@ extension JSONValue: Encodable {
             try container.encode(value)
 
         case .object(keyValues: let keyValues):
-            var container = encoder.container(keyedBy: StringKey.self)
+            var container = encoder.container(keyedBy: JSONKey.self)
             for (key, value) in keyValues {
-                try container.encode(value, forKey: StringKey(key))
+                try container.encode(value, forKey: JSONKey(key))
             }
 
         case .array(let values):
@@ -57,6 +57,8 @@ extension JSONValue: Encodable {
         }
     }
 }
+
+// MARK: - Decode helpers
 
 private func decodeString(decoder: Decoder) throws -> JSONValue {
     try .string(decoder.singleValueContainer().decode(String.self))
@@ -75,9 +77,9 @@ private func decodeBool(decoder: Decoder) throws -> JSONValue {
 }
 
 private func decodeObject(decoder: Decoder) throws -> JSONValue {
-    let object = try decoder.container(keyedBy: StringKey.self)
+    let object = try decoder.container(keyedBy: JSONKey.self)
     let pairs = try object.allKeys.map(\.stringValue).map { key in
-        (key, try object.decode(JSONValue.self, forKey: StringKey(key)))
+        (key, try object.decode(JSONValue.self, forKey: JSONKey(key)))
     }
     return .object(keyValues: pairs)
 }
@@ -97,10 +99,10 @@ private func decodeNil(decoder: Decoder) throws -> JSONValue {
                                                   debugDescription: "Did not find nil")) }
 }
 
-// MARK: - StringKey
-private struct StringKey: CodingKey, Hashable, CustomStringConvertible {
-    public var description: String { stringValue }
+// MARK: - JSONKey
 
+// Minimal version of AnyCodingKey.
+private struct JSONKey: CodingKey {
     public let stringValue: String
     public init(_ string: String) { self.stringValue = string }
     public init?(stringValue: String) { self.init(stringValue) }
