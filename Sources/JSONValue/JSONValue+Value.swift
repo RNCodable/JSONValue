@@ -4,7 +4,7 @@ import Foundation
 
 // String
 extension JSONValue {
-    public var stringValue: String {
+    public var asString: String {
         get throws {
             guard case let .string(value) = self else { throw Error.typeMismatch }
             return value
@@ -31,23 +31,23 @@ extension JSONValue {
         return value
     }
 
-    public var intValue: Int { get throws { try _numberValue() } }
-    public var doubleValue: Double { get throws { try _numberValue() } }
-    public var floatValue: Float { get throws { try _numberValue() } }
+    public var asInt: Int { get throws { try _numberValue() } }
+    public var asDouble: Double { get throws { try _numberValue() } }
+    public var asFloat: Float { get throws { try _numberValue() } }
 
-    public var uintValue: UInt { get throws { try _numberValue() } }
-    public var uint8Value: UInt8 { get throws { try _numberValue() } }
-    public var uint16Value: UInt16 { get throws { try _numberValue() } }
-    public var uint32Value: UInt32 { get throws { try _numberValue() } }
-    public var uint64Value: UInt64 { get throws { try _numberValue() } }
+    public var asUInt: UInt { get throws { try _numberValue() } }
+    public var asUInt8: UInt8 { get throws { try _numberValue() } }
+    public var asUInt16: UInt16 { get throws { try _numberValue() } }
+    public var asUInt32: UInt32 { get throws { try _numberValue() } }
+    public var asUInt64: UInt64 { get throws { try _numberValue() } }
 
-    public var int8Value: Int8 { get throws { try _numberValue() } }
-    public var int16Value: Int16 { get throws { try _numberValue() } }
-    public var int32Value: Int32 { get throws { try _numberValue() } }
-    public var int64Value: Int64 { get throws { try _numberValue() } }
+    public var asInt8: Int8 { get throws { try _numberValue() } }
+    public var asInt16: Int16 { get throws { try _numberValue() } }
+    public var asInt32: Int32 { get throws { try _numberValue() } }
+    public var asInt64: Int64 { get throws { try _numberValue() } }
 
     #if canImport(Foundation)
-    public var decimalValue: Decimal {
+    public var asDecimal: Decimal {
         get throws {
             guard let value = Decimal(string: try digits) else { throw Error.typeMismatch }
             return value
@@ -58,7 +58,7 @@ extension JSONValue {
 
 // Bool
 extension JSONValue {
-    public var boolValue: Bool {
+    public var asBool: Bool {
         get throws {
             guard case let .bool(value) = self else { throw Error.typeMismatch }
             return value
@@ -77,13 +77,13 @@ extension JSONValue {
 
     // Uniques keys using last value by default. This allows overrides.
     // Compare to ``value(for:)``
-    public var dictionaryValue: [String: JSONValue] {
+    public var asDictionary: [String: JSONValue] {
         get throws {
-            try dictionaryValue(uniquingKeysWith: { _, last in last })
+            try asDictionary(uniquingKeysWith: { _, last in last })
         }
     }
 
-    public func dictionaryValue(uniquingKeysWith: (JSONValue, JSONValue) -> JSONValue)
+    public func asDictionary(uniquingKeysWith: (JSONValue, JSONValue) -> JSONValue)
     throws -> [String: JSONValue] {
         Dictionary(try keyValues, uniquingKeysWith: uniquingKeysWith)
     }
@@ -109,9 +109,11 @@ extension JSONValue {
 
 // Array
 extension JSONValue {
-    public func arrayValue() throws -> [JSONValue] {
-        guard case let .array(array) = self else { throw Error.typeMismatch }
-        return array
+    public var asArray: [JSONValue] {
+        get throws {
+            guard case let .array(array) = self else { throw Error.typeMismatch }
+            return array
+        }
     }
 
     public var count: Int {
@@ -125,7 +127,7 @@ extension JSONValue {
     }
 
     public func value(at index: Int) throws -> JSONValue {
-        let array = try arrayValue()
+        let array = try self.asArray
         guard array.indices.contains(index) else { throw Error.missingValue }
         return array[index]
     }

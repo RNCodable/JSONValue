@@ -42,7 +42,7 @@ final class JSONValueCodableTests: XCTestCase {
         let expectedJSON = JSONValue(expectedValue)
 
         XCTAssertEqual(result, expectedJSON)
-        XCTAssertEqual(try result.stringValue, expectedValue)
+        XCTAssertEqual(try result.asString, expectedValue)
     }
 
     func testIntEncode() throws {
@@ -59,7 +59,7 @@ final class JSONValueCodableTests: XCTestCase {
         let expectedValue = 1
 
         XCTAssertEqual(result, JSONValue(expectedValue))
-        XCTAssertEqual(try result.intValue, expectedValue)
+        XCTAssertEqual(try result.asInt, expectedValue)
     }
 
     func testDoubleEncode() throws {
@@ -76,7 +76,7 @@ final class JSONValueCodableTests: XCTestCase {
         let expectedValue = 1.1
 
         XCTAssertEqual(result, JSONValue(expectedValue))
-        XCTAssertEqual(try result.doubleValue, expectedValue)
+        XCTAssertEqual(try result.asDouble, expectedValue)
     }
 
     func testUInt32Encode() throws {
@@ -93,7 +93,7 @@ final class JSONValueCodableTests: XCTestCase {
         let expectedValue = 1 as UInt32
 
         XCTAssertEqual(result, JSONValue(expectedValue))
-        XCTAssertEqual(try result.uint32Value, expectedValue)
+        XCTAssertEqual(try result.asUInt32, expectedValue)
     }
 
     func testBoolEncode() throws {
@@ -110,7 +110,7 @@ final class JSONValueCodableTests: XCTestCase {
         let expectedValue = true
 
         XCTAssertEqual(result, JSONValue(expectedValue))
-        XCTAssertEqual(try result.boolValue, expectedValue)
+        XCTAssertEqual(try result.asBool, expectedValue)
     }
 
     func testObjectEncode() throws {
@@ -144,7 +144,7 @@ final class JSONValueCodableTests: XCTestCase {
         let expectedValue = [1,2,3] as [JSONValue]
 
         XCTAssertEqual(result, JSONValue(expectedValue))
-        XCTAssertEqual(try result.arrayValue(), expectedValue)
+        XCTAssertEqual(try result.asArray, expectedValue)
     }
 
     func testNullEncode() throws {
