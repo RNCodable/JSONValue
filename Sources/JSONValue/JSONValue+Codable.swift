@@ -30,9 +30,9 @@ extension JSONValue: Encodable {
         case .number:
             var container = encoder.singleValueContainer()
 #if canImport(Foundation)
-            try container.encode(try self.decimalValue())
+            try container.encode(try self.decimalValue)
 #else
-            try container.encode(try self.doubleValue())
+            try container.encode(try self.doubleValue)
 #endif
 
         case .bool(let value):
