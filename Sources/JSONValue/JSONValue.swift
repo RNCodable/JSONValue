@@ -12,14 +12,13 @@ public typealias JSONArray = [JSONValue]
 
 extension JSONValue: CustomStringConvertible {
     public enum Error: Swift.Error {
-        // FIXME: Include better information in these error
         case typeMismatch
         case missingValue
     }
 
+    // The output of `description` is legal Swift that would reconstruct the JSONValue.
     public var description: String {
         switch self {
-        case .null: return ".null"
         case .string(let string): return string.debugDescription
         case .number(let digits): return digits.digitsDescription
         case .bool(let value): return value ? "true" : "false"
@@ -31,6 +30,7 @@ extension JSONValue: CustomStringConvertible {
             }
         case .array(let values):
             return "[" + values.map(\.description).joined(separator: ", ") + "]"
+        case .null: return "nil"
         }
     }
 }
