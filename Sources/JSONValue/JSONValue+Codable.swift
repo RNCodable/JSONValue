@@ -1,6 +1,4 @@
-#if canImport(Foundation)
 import Foundation
-#endif
 
 extension JSONValue: Decodable {
     public init(from decoder: Decoder) throws {
@@ -29,11 +27,7 @@ extension JSONValue: Encodable {
 
         case .number:
             var container = encoder.singleValueContainer()
-#if canImport(Foundation)
             try container.encode(try self.asDecimal)
-#else
-            try container.encode(try self.asDouble)
-#endif
 
         case .bool(let value):
             var container = encoder.singleValueContainer()
@@ -65,11 +59,7 @@ private func decodeString(decoder: Decoder) throws -> JSONValue {
 }
 
 private func decodeNumber(decoder: Decoder) throws -> JSONValue {
-#if canImport(Foundation)
     try .number(digits: decoder.singleValueContainer().decode(Decimal.self).description)
-#else
-    try .number(digits: decoder.singleValueContainer().decode(Double.self).description)
-#endif
 }
 
 private func decodeBool(decoder: Decoder) throws -> JSONValue {

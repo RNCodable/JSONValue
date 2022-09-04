@@ -1,6 +1,4 @@
-#if canImport(Foundation)
 import Foundation
-#endif
 
 // String
 extension JSONValue {
@@ -46,14 +44,12 @@ extension JSONValue {
     public var asInt32: Int32 { get throws { try _numberValue() } }
     public var asInt64: Int64 { get throws { try _numberValue() } }
 
-    #if canImport(Foundation)
     public var asDecimal: Decimal {
         get throws {
             guard let value = Decimal(string: try digits) else { throw Error.typeMismatch }
             return value
         }
     }
-    #endif
 }
 
 // Bool
