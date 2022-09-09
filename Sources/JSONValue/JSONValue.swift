@@ -2,15 +2,12 @@ public enum JSONValue {
     case string(String)
     case number(digits: String)
     case bool(Bool)
-    case object(keyValues: JSONKeyValues)
-    case array(JSONArray)
+    case object([String: JSONValue])
+    case array([JSONValue])
     case null
 }
 
-public typealias JSONKeyValues = [(key: String, value: JSONValue)]
-public typealias JSONArray = [JSONValue]
-
-extension JSONValue: CustomStringConvertible {
+extension JSONValue: CustomStringConvertible, Hashable {
     public enum Error: Swift.Error {
         case typeMismatch
         case missingValue

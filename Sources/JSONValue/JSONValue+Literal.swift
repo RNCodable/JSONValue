@@ -52,6 +52,6 @@ extension JSONValue: ExpressibleByDictionaryLiteral {
   public typealias Key = String
   public typealias Value = JSONValue
   public init(dictionaryLiteral elements: (Key, Value)...) {
-    self = .object(keyValues: elements)
+      self = .object(Dictionary(elements, uniquingKeysWith: { (_, last) in last }))
   }
 }

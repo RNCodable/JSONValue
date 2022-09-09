@@ -115,8 +115,10 @@ final class JSONValueCodableTests: XCTestCase {
 
     func testObjectEncode() throws {
         let value: JSONValue = ["name": "Bob", "age": 43]
-        let result = try JSONEncoder().stringEncode(value)
-        let expected = "{\"name\":\"Bob\",\"age\":43}"
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .sortedKeys
+        let result = try encoder.stringEncode(value)
+        let expected = "{\"age\":43,\"name\":\"Bob\"}"
 
         XCTAssertEqual(result, expected)
     }

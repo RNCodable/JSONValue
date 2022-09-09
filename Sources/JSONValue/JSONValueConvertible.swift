@@ -1,10 +1,3 @@
-//
-//  File.swift
-//  
-//
-//  Created by Rob Napier on 8/9/22.
-//
-
 import Foundation
 
 extension JSONValue {
@@ -94,24 +87,26 @@ extension Array: JSONConvertible where Element: JSONConvertible {}
 
 public extension Sequence where Element == (key: String, value: LosslessJSONConvertible) {
     func jsonValue() -> JSONValue {
-        return .object(keyValues: self.map { ($0.key, $0.value.jsonValue()) } )
+        return .object(Dictionary(self.map { ($0.key, $0.value.jsonValue()) }, uniquingKeysWith: { (_, last) in last }))
     }
 }
 
 public extension Sequence where Element == (key: String, value: JSONConvertible) {
     func jsonValue() throws -> JSONValue {
-        return .object(keyValues: try self.map { ($0.key, try $0.value.jsonValue()) } )
+        return .object(Dictionary(try self.map { ($0.key, try $0.value.jsonValue()) },
+                                  uniquingKeysWith: { (_, last) in last }))
     }
 }
 
 public extension Dictionary where Key == String, Value: LosslessJSONConvertible {
     func jsonValue() -> JSONValue {
-        return .object(keyValues: self.map { ($0.key, $0.value.jsonValue()) } )
+        return .object(self.mapValues { $0.jsonValue() })
     }
 }
 
 public extension Dictionary where Key == String, Value: JSONConvertible {
     func jsonValue() throws -> JSONValue {
-        return .object(keyValues: try self.map { ($0.key, try $0.value.jsonValue()) } )
+        return .object(try self.mapValues { try $0.jsonValue() })
+
     }
 }

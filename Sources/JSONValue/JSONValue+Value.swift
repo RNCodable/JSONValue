@@ -64,36 +64,19 @@ extension JSONValue {
 
 // Object
 extension JSONValue {
-    public var keyValues: JSONKeyValues {
-        get throws {
-            guard case let .object(keyValues) = self else { throw Error.typeMismatch }
-            return keyValues
-        }
-    }
-
-    // Uniques keys using last value by default. This allows overrides.
-    // Compare to ``value(for:)``
     public var asDictionary: [String: JSONValue] {
         get throws {
-            try asDictionary(uniquingKeysWith: { _, last in last })
+            guard case let .object(value) = self else { throw Error.typeMismatch }
+            return value
         }
-    }
-
-    public func asDictionary(uniquingKeysWith: (JSONValue, JSONValue) -> JSONValue)
-    throws -> [String: JSONValue] {
-        Dictionary(try keyValues, uniquingKeysWith: uniquingKeysWith)
     }
 
     // Returns first value matching key.
     public func value(for key: String) throws -> JSONValue {
-        guard let result = try keyValues.first(where: { $0.key == key })?.value else {
+        guard let result = try asDictionary[key] else {
             throw Error.missingValue
         }
         return result
-    }
-
-    public func values(for key: String) throws -> [JSONValue] {
-        try keyValues.filter({ $0.key == key }).map(\.value)
     }
 
     public subscript(_ key: String) -> JSONValue {

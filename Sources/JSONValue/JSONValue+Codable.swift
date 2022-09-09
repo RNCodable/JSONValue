@@ -67,11 +67,7 @@ private func decodeBool(decoder: Decoder) throws -> JSONValue {
 }
 
 private func decodeObject(decoder: Decoder) throws -> JSONValue {
-    let object = try decoder.container(keyedBy: JSONKey.self)
-    let pairs = try object.allKeys.map(\.stringValue).map { key in
-        (key, try object.decode(JSONValue.self, forKey: JSONKey(key)))
-    }
-    return .object(keyValues: pairs)
+    return .object(try Dictionary(from: decoder))
 }
 
 private func decodeArray(decoder: Decoder) throws -> JSONValue {
