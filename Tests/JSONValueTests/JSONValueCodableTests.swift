@@ -217,4 +217,9 @@ final class JSONValueCodableTests: XCTestCase {
         XCTAssertEqual(parsed, expected)
     }
 
+    func testFailMissingJSON() throws {
+        let json = Data()
+        XCTAssertThrowsError(try JSONDecoder().decode(JSONValue.self, from: json))
+    }
+
 }

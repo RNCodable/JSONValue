@@ -21,30 +21,14 @@ extension JSONValue: Decodable {
 extension JSONValue: Encodable {
     public func encode(to encoder: Encoder) throws {
         switch self {
-        case .string(let string):
-            var container = encoder.singleValueContainer()
-            try container.encode(string)
-
+        case .string(let string): try string.encode(to: encoder)
         case .number:
+            // Decimal is special-cased in JSONEncoder and cannot encode itself
             var container = encoder.singleValueContainer()
             try container.encode(try self.asDecimal)
-
-        case .bool(let value):
-            var container = encoder.singleValueContainer()
-            try container.encode(value)
-
-        case .object(keyValues: let keyValues):
-            var container = encoder.container(keyedBy: JSONKey.self)
-            for (key, value) in keyValues {
-                try container.encode(value, forKey: JSONKey(key))
-            }
-
-        case .array(let values):
-            var container = encoder.unkeyedContainer()
-            for value in values {
-                try container.encode(value)
-            }
-
+        case .bool(let value): try value.encode(to: encoder)
+        case .object(let object): try object.encode(to: encoder)
+        case .array(let values): try values.encode(to: encoder)
         case .null:
             var container = encoder.singleValueContainer()
             try container.encodeNil()
