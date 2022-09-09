@@ -5,14 +5,14 @@ public enum JSONValue {
     case object([String: JSONValue])
     case array([JSONValue])
     case null
-}
-
-extension JSONValue: CustomStringConvertible, Hashable {
     public enum Error: Swift.Error {
         case typeMismatch
         case missingValue
     }
+}
 
+// NOTE: It's tempting to make this LosslessStringConvertible, but that would conflict with the JSON(String) initializer
+extension JSONValue: CustomStringConvertible, Hashable {
     // The output of `description` is legal Swift that would reconstruct the JSONValue.
     public var description: String {
         switch self {
@@ -23,9 +23,11 @@ extension JSONValue: CustomStringConvertible, Hashable {
             if object.isEmpty {
                 return "[:]"
             } else {
-                return "[" + object
+                return "[" +
+                object
                     .sorted(by: { $0.key < $1.key })
-                    .map { "\($0.key.debugDescription): \($0.value)" }.joined(separator: ", ") + "]"
+                    .map { "\($0.key.debugDescription): \($0.value)" }.joined(separator: ", ") +
+                "]"
             }
         case .array(let values):
             return "[" + values.map(\.description).joined(separator: ", ") + "]"
