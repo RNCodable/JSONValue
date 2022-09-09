@@ -19,11 +19,13 @@ extension JSONValue: CustomStringConvertible, Hashable {
         case .string(let string): return string.debugDescription
         case .number(let digits): return digits.digitsDescription
         case .bool(let value): return value ? "true" : "false"
-        case .object(keyValues: let keyValues):
-            if keyValues.isEmpty {
+        case .object(let object):
+            if object.isEmpty {
                 return "[:]"
             } else {
-                return "[" + keyValues.map { "\($0.key.debugDescription): \($0.value)" }.joined(separator: ", ") + "]"
+                return "[" + object
+                    .sorted(by: { $0.key < $1.key })
+                    .map { "\($0.key.debugDescription): \($0.value)" }.joined(separator: ", ") + "]"
             }
         case .array(let values):
             return "[" + values.map(\.description).joined(separator: ", ") + "]"

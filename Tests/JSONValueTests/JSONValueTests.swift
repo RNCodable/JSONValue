@@ -49,7 +49,7 @@ final class JSONValueDescriptionTests: XCTestCase {
             "null": nil
             ]
         XCTAssertEqual(value.description, #"""
-            ["string": "def", "int": 123, "bool": true, "object": ["nested": "123"], "array": [1, 2, 3], "null": nil]
+            ["array": [1, 2, 3], "bool": true, "int": 123, "null": nil, "object": ["nested": "123"], "string": "def"]
             """#)
     }
 

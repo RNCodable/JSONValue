@@ -107,6 +107,5 @@ public extension Dictionary where Key == String, Value: LosslessJSONConvertible 
 public extension Dictionary where Key == String, Value: JSONConvertible {
     func jsonValue() throws -> JSONValue {
         return .object(try self.mapValues { try $0.jsonValue() })
-
     }
 }
